@@ -68,7 +68,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="saveCrypto()" [disabled]="!formGroup.valid">Save</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="saveCrypto()" [disabled]="!formGroup.valid">
+      <i class="bi bi-check-all me-2" *ngIf="formGroup.valid"></i>
+      <i class="bi bi-ban me-2" *ngIf="!formGroup.valid"></i>
+      Save
+    </button>
   </div>
 </ng-template>
 <div class="container-fluid d-flex flex-column align-items-center">
@@ -125,69 +129,84 @@
     </div>
     <div class="d-flex flex-row-reverse mb-3 mt-3">
       <button class="nav-item btn btn-secondary border-0 shadow ms-2">
-        <a class="nav-link" (click)="newCryptoModal(content)">New Crypto</a>
+        <a class="nav-link" (click)="newCryptoModal(content)">
+          <i class="bi bi-file-earmark-plus-fill me-2"></i>
+          New Crypto
+        </a>
       </button>
-      <button class="btn btn-info border-0 shadow text-white" (click)="search()">Search</button>
+      <button class="btn btn-info border-0 shadow text-white" (click)="search()">
+        <i class="bi bi-search me-2"></i>
+        Search
+      </button>
     </div>
 
-    <table class="table table-hover">
-      <thead class="table-header">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Type</th>
-        <th scope="col">community</th>
-        <th scope="col">Algorithm</th>
-        <th scope="col">Unit</th>
-        <th scope="col">ConsensusRule</th>
-        <th scope="col">Emission</th>
-        <th scope="col">Platform</th>
-        <th scope="col">Protocol</th>
-        <th scope="col">WebSite</th>
-        <th scope="col">Action</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let crypto of cryptoService.pageCryptos.content">
-        <th scope="row">{{ crypto.name }}</th>
-        <td>{{ crypto.name }}</td>
-        <td>{{ crypto.type }}</td>
-        <td>{{ crypto.community }}</td>
-        <td>{{ crypto.algorithm }}</td>
-        <td>{{ crypto.unit }}</td>
-        <td>{{ crypto.consensusRule }}</td>
-        <td>{{ crypto.emission }}</td>
-        <td>{{ crypto.platform }}</td>
-        <td>{{ crypto.protocol }}</td>
-        <td>{{ crypto.webSite }}</td>
-        <td>
-          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-            <button type="button" class="btn btn-info">
-              <i class="bi bi-pencil text-light"></i>
-            </button>
-            <button type="button" class="btn btn-danger" (click)="deleteCrypto(crypto.id)">
-              <i class="bi bi-trash text-light fw-bold"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <ngb-alert [dismissible]="false" *ngIf="cryptoService.pageCryptos.totalElements == 0">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      <strong>Warning!</strong> No cryptos found, you can add new one.
+    </ngb-alert>
 
-    <div class="d-flex justify-content-between p-2">
-      <ngb-pagination
-        (pageChange)="changePage($event)"
-        [(page)]="page"
-        [collectionSize]="(cryptoService.pageCryptos.totalElements)"
-        [pageSize]="cryptoService.pageCryptos.size">
-      </ngb-pagination>
+    <div *ngIf="cryptoService.pageCryptos.totalElements > 0">
+      <table class="table table-hover" >
+        <thead class="table-header">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Type</th>
+          <th scope="col">community</th>
+          <th scope="col">Algorithm</th>
+          <th scope="col">Unit</th>
+          <th scope="col">ConsensusRule</th>
+          <th scope="col">Emission</th>
+          <th scope="col">Platform</th>
+          <th scope="col">Protocol</th>
+          <th scope="col">WebSite</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let crypto of cryptoService.pageCryptos.content">
+          <th scope="row">{{ crypto.name }}</th>
+          <td>{{ crypto.name }}</td>
+          <td>{{ crypto.type }}</td>
+          <td>{{ crypto.community }}</td>
+          <td>{{ crypto.algorithm }}</td>
+          <td>{{ crypto.unit }}</td>
+          <td>{{ crypto.consensusRule }}</td>
+          <td>{{ crypto.emission }}</td>
+          <td>{{ crypto.platform }}</td>
+          <td>{{ crypto.protocol }}</td>
+          <td>{{ crypto.webSite }}</td>
+          <td>
+            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+              <button type="button" class="btn btn-info">
+                <i class="bi bi-pencil text-light"></i>
+              </button>
+              <button type="button" class="btn btn-danger" (click)="deleteCrypto(crypto.id)">
+                <i class="bi bi-trash text-light fw-bold"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
-      <select (ngModelChange)="changeSize($event)" [(ngModel)]="size" class="form-select" name="pageSize" style="width: auto">
-        <option [ngValue]="5">5 items per page</option>
-        <option [ngValue]="10">10 items per page</option>
-        <option [ngValue]="20">20 items per page</option>
-      </select>
+      <div class="d-flex justify-content-between p-2">
+        <ngb-pagination
+          (pageChange)="changePage($event)"
+          [(page)]="page"
+          [collectionSize]="(cryptoService.pageCryptos.totalElements)"
+          [pageSize]="cryptoService.pageCryptos.size">
+        </ngb-pagination>
+
+        <select (ngModelChange)="changeSize($event)" [(ngModel)]="size" class="form-select" name="pageSize" style="width: auto">
+          <option [ngValue]="5">5 items per page</option>
+          <option [ngValue]="10">10 items per page</option>
+          <option [ngValue]="20">20 items per page</option>
+        </select>
+      </div>
     </div>
+
+
 
   </div>
 </div>

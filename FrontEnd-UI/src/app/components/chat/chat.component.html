@@ -1,15 +1,46 @@
+<ng-template #uploadPDF let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Upload PDF file</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="application/pdf" (change)="onSelectPDF($event)">
+        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04" [disabled]="!this.formGroup.get('pdf_file')?.value">
+          <div class="d-flex align-items-center">
+            Submit PDF
+            <div class="spinner-border text-secondary-emphasis ms-2" role="status" *ngIf="isUploading">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+        </button>
+      </div>
+    </form>
+  </div>
+  <!--<div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="d('Cross click')">Save</button>
+  </div>-->
+</ng-template>
+
 <section>
   <div class="container py-5">
 
     <div class="row d-flex justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-6">
 
-        <div class="card" id="chat2">
+        <div class="card border-0 shadow" id="chat2">
           <div class="card-header d-flex justify-content-between align-items-center p-3">
-            <h5 class="mb-0">Chat</h5>
-            <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" data-mdb-ripple-color="dark" (click)="clearChatHistory()">
-              Clear chat
-            </button>
+            <h5 class="mb-0">Ask the AI assistance</h5>
+            <div>
+              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary btn-sm me-2" data-mdb-ripple-color="dark" (click)="showUploadModal(uploadPDF)">
+                Upload your PDF
+              </button>
+              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm" data-mdb-ripple-color="dark" (click)="clearChatHistory()">
+                Clear chat
+              </button>
+            </div>
           </div>
           <div class="card-body overflow-y-scroll" data-mdb-perfect-scrollbar-init style="position: relative; height: 60vh">
 
@@ -22,12 +53,12 @@
                 <img src="/avatars/ai_avatar.png"
                      alt="avatar 1" style="width: 45px; height: 100%;">
                 <div>
-                  <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary">{{msg.message}}</p>
+                  <p class="small p-2 ms-3 mb-1 rounded-3 bg-body-tertiary shadow-sm">{{msg.message}}</p>
                 </div>
               </div>
               <div class="d-flex flex-row justify-content-end mb-4 pt-1" *ngIf="msg.sender == 'user'">
                 <div>
-                  <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{msg.message}}</p>
+                  <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary shadow-sm">{{msg.message}}</p>
                 </div>
                 <img src="/avatars/user_avatar.png"
                      alt="avatar 1" style="width: 45px; height: 100%;">
@@ -37,7 +68,7 @@
           <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
             <img src="/avatars/user_avatar.png"
                  alt="avatar 3" style="width: 40px; height: 100%;">
-            <input type="text" class="form-control form-control-lg" id="exampleFormControlInput1"
+            <input type="text" class="form-control form-control-lg ms-2 shadow-sm" id="exampleFormControlInput1"
                    placeholder="Type message" [(ngModel)]="userMessage" [disabled]="isLoading">
             <button class="btn btn-secondary border-0 shadow ms-2" (click)="send()" [disabled]="userMessage.length < 5">
               <div class="d-flex align-items-center">

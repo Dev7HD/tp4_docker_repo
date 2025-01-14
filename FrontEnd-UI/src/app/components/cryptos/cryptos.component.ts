@@ -1,8 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {NgbModal, NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbAlert, NgbModal, NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CryptoService} from '../../services/crypto.service';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
 
 @Component({
@@ -13,6 +13,8 @@ import {ToastrService} from 'ngx-toastr';
     ReactiveFormsModule,
     FormsModule,
     NgForOf,
+    NgbAlert,
+    NgIf,
   ],
   templateUrl: './cryptos.component.html',
   styleUrl: './cryptos.component.css'
@@ -81,7 +83,8 @@ export class CryptosComponent implements OnInit{
   }
 
   search() {
-    this.cryptoService.getCryptos(this.cryptoName, this.cryptoType, this.cryptoUnit, this.cryptoPlatform, this.page - 1, this.size)
+    let page = this.page - 1 >= 0 ? this.page - 1 : 0
+    this.cryptoService.getCryptos(this.cryptoName, this.cryptoType, this.cryptoUnit, this.cryptoPlatform, page, this.size)
   }
 
   newCryptoModal(content: any) {

@@ -1,9 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ChatService} from '../../services/chat.service';
 import {NgForOf, NgIf} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {Message} from '../../models/Message';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ToastrService} from 'ngx-toastr';
+import {environment} from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-chat',
@@ -11,7 +14,8 @@ import {Message} from '../../models/Message';
   imports: [
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -19,12 +23,18 @@ import {Message} from '../../models/Message';
 export class ChatComponent implements OnInit{
   chatService: ChatService = inject(ChatService);
   private _http: HttpClient = inject(HttpClient);
+  private _modalService: NgbModal = inject(NgbModal);
+  private _formBuilder: FormBuilder = inject(FormBuilder);
+  private _toastr: ToastrService = inject(ToastrService);
+  formGroup!: FormGroup;
 
   userMessage: string = "";
   isLoading: boolean = false;
+  isUploading: boolean = false;
 
   ngOnInit(): void {
     console.table(this.chatService.messages)
+    this.initForm()
   }
 
   send(): void{
@@ -36,7 +46,7 @@ export class ChatComponent implements OnInit{
       }
       this.chatService.messages.push(userRequest)
 
-      let request = this._http.post('http://localhost:8888/rag-service/chat', this.userMessage, {responseType: "text"});
+      let request = this._http.post(`${environment.ragUrl}/chat`, this.userMessage, {responseType: "text"});
       request.subscribe({
         next: response => {
           let aiResponse: Message = {
@@ -57,5 +67,44 @@ export class ChatComponent implements OnInit{
 
   clearChatHistory() {
     this.chatService.initChat()
+  }
+
+  showUploadModal(uploadPDF: any) {
+    this.initForm()
+    this._modalService.open(uploadPDF, { size: 'lg' })
+  }
+
+  initForm(){
+    this.formGroup = this._formBuilder.group({
+      pdf_file: ['']
+    })
+  }
+
+  onSelectPDF($event: any){
+    if($event.target.files.length > 0){
+      const file = $event.target.files[0];
+      this.formGroup.get('pdf_file')?.setValue(file);
+      console.log(this.formGroup.get('pdf_file')?.value)
+    }
+  }
+
+  onSubmit(){
+    this.isUploading = true
+    let formData = new FormData();
+    formData.append('pdf_file', this.formGroup.get('pdf_file')?.value);
+    console.log(formData)
+    let _url = `${environment.ragUrl}/load-pdf`
+    this._http.post<any>(_url, formData).subscribe({
+      next: () => {
+        this.initForm()
+        this.isUploading = false
+        this._modalService.dismissAll()
+        this._toastr.success('PDF has been successfully uploaded')
+      }, error: err => {
+        this.isUploading = false
+        console.error("Oops! Uploading PDF failed.", err)
+        this._toastr.error('Oops! Uploading PDF failed.')
+      }
+    })
   }
 }

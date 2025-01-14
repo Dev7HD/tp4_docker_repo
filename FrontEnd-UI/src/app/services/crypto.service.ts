@@ -3,13 +3,14 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CryptoCurrency} from '../models/CryptoCurrency';
 import {Page} from '../models/Page';
+import {environment} from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CryptoService {
 
-  private baseUrl = 'http://localhost:8888/crypto-service/cryptos';
+  private baseUrl = `${environment.cryptoUrl}/cryptos`;
 
   pageCryptos!: Page<CryptoCurrency>;
   isLoading: boolean = false;
