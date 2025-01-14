@@ -1,4 +1,4 @@
-package ma.dev7hd.ragservice.dataLoaders;
+package ma.dev7hd.ragservice.services.dataLoaders;
 
 import lombok.AllArgsConstructor;
 import org.springframework.ai.document.Document;
@@ -14,13 +14,19 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class PDFLoaderImpl implements IPDFLoader{
-    private VectorStore vectorStore;
+    private final VectorStore vectorStore;
 
+    @Override
     public void loadPDF(Resource pdfResource){
+        // Process the PDF document
         PagePdfDocumentReader reader = new PagePdfDocumentReader(pdfResource);
         List<Document> documents = reader.get();
+
+        // Split the document into chunks
         TextSplitter textSplitter = new TokenTextSplitter();
         List<Document> chunks = textSplitter.split(documents);
+
+        // Save the new chunks to the vector store
         vectorStore.accept(chunks);
     }
 }

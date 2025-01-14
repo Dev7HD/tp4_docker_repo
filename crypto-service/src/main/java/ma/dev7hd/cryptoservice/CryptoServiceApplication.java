@@ -7,8 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.UUID;
-
 @SpringBootApplication
 public class CryptoServiceApplication {
 
@@ -23,7 +21,7 @@ public class CryptoServiceApplication {
                     CryptoCurrency.builder()
                             .name("Binance Coin (BNB)")
                             .unit("BNB")
-                            .emission(200000000.0)
+                            .emission(200_000_000.0)
                             .type("service")
                             .protocol("open source")
                             .algorithm("Ethash")

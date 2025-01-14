@@ -22,8 +22,8 @@ public class CryptoController {
             @RequestParam(required = false, defaultValue = "") String type,
             @RequestParam(required = false, defaultValue = "") String unit,
             @RequestParam(required = false, defaultValue = "") String platform,
-            @RequestParam(required = true, defaultValue = "0") int page,
-            @RequestParam(required = true, defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ){
         return cryptoService.getAllCryptos(name, type, unit, platform, Pageable.ofSize(size).withPage(page));
     }

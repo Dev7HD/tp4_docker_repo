@@ -1,0 +1,193 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Crypto</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formGroup" (ngSubmit)="saveCrypto()">
+      <div class="mb-3 row">
+        <label for="staticName" class="col-sm-4 col-form-label">Name</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control border-1" id="staticName" formControlName="name">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticType" class="col-sm-4 col-form-label">Type</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticType" formControlName="type">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticUnit" class="col-sm-4 col-form-label">Unit</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticUnit" formControlName="unit">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticEmission" class="col-sm-4 col-form-label">Emission</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticEmission" formControlName="emission">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticConsensusRule" class="col-sm-4 col-form-label">ConsensusRule</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticConsensusRule" formControlName="consensusRule">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticAlgorithm" class="col-sm-4 col-form-label">Algorithm</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticAlgorithm" formControlName="algorithm">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticProtocol" class="col-sm-4 col-form-label">Protocol</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticProtocol" formControlName="protocol">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticPlatform" class="col-sm-4 col-form-label">Platform</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticPlatform" formControlName="platform">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticWebSite" class="col-sm-4 col-form-label">WebSite</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticWebSite" formControlName="webSite">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="staticCommunity" class="col-sm-4 col-form-label">Community</label>
+        <div class="col-sm-8">
+          <input type="text"  class="form-control" id="staticCommunity" formControlName="community">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="saveCrypto()" [disabled]="!formGroup.valid">Save</button>
+  </div>
+</ng-template>
+<div class="container-fluid d-flex flex-column align-items-center">
+  <div class="card card-body border-0 shadow mt-4">
+    <div class="mb-3 flex-row d-flex flex-lg-wrap justify-content-between">
+      <div class="d-flex align-items-center col-6">
+        <label class="col-3 col-sm-auto col-form-label mt-3 me-3" for="name-search">Crypto name:</label>
+        <div class="col-xs-3 col-sm-auto">
+          <input
+            [(ngModel)]="cryptoName"
+            class="form-control"
+            id="name-search"
+            name="searchTerm"
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="d-flex align-items-center col-6">
+        <label class="col-3 col-sm-auto col-form-label mt-3 me-3" for="type-search">Crypto type:</label>
+        <div class="col-xs-3 col-sm-auto">
+          <input
+            [(ngModel)]="cryptoType"
+            class="form-control"
+            id="type-search"
+            name="searchTerm"
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="d-flex align-items-center col-6">
+        <label class="col-3 col-sm-auto col-form-label mt-3 me-3" for="unit-search">Crypto unit:</label>
+        <div class="col-xs-3 col-sm-auto">
+          <input
+            [(ngModel)]="cryptoUnit"
+            class="form-control"
+            id="unit-search"
+            name="searchTerm"
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="d-flex align-items-center col-6">
+        <label class="col-3 col-sm-auto col-form-label mt-3 me-3" for="platform-search">Crypto platform:</label>
+        <div class="col-xs-3 col-sm-auto">
+          <input
+            [(ngModel)]="cryptoPlatform"
+            class="form-control"
+            id="platform-search"
+            name="searchTerm"
+            type="text"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-row-reverse mb-3 mt-3">
+      <button class="nav-item btn btn-secondary border-0 shadow ms-2">
+        <a class="nav-link" (click)="newCryptoModal(content)">New Crypto</a>
+      </button>
+      <button class="btn btn-info border-0 shadow text-white" (click)="search()">Search</button>
+    </div>
+
+    <table class="table table-hover">
+      <thead class="table-header">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">community</th>
+        <th scope="col">Algorithm</th>
+        <th scope="col">Unit</th>
+        <th scope="col">ConsensusRule</th>
+        <th scope="col">Emission</th>
+        <th scope="col">Platform</th>
+        <th scope="col">Protocol</th>
+        <th scope="col">WebSite</th>
+        <th scope="col">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let crypto of cryptoService.pageCryptos.content">
+        <th scope="row">{{ crypto.name }}</th>
+        <td>{{ crypto.name }}</td>
+        <td>{{ crypto.type }}</td>
+        <td>{{ crypto.community }}</td>
+        <td>{{ crypto.algorithm }}</td>
+        <td>{{ crypto.unit }}</td>
+        <td>{{ crypto.consensusRule }}</td>
+        <td>{{ crypto.emission }}</td>
+        <td>{{ crypto.platform }}</td>
+        <td>{{ crypto.protocol }}</td>
+        <td>{{ crypto.webSite }}</td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button type="button" class="btn btn-info">
+              <i class="bi bi-pencil text-light"></i>
+            </button>
+            <button type="button" class="btn btn-danger" (click)="deleteCrypto(crypto.id)">
+              <i class="bi bi-trash text-light fw-bold"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        (pageChange)="changePage($event)"
+        [(page)]="page"
+        [collectionSize]="(cryptoService.pageCryptos.totalElements)"
+        [pageSize]="cryptoService.pageCryptos.size">
+      </ngb-pagination>
+
+      <select (ngModelChange)="changeSize($event)" [(ngModel)]="size" class="form-select" name="pageSize" style="width: auto">
+        <option [ngValue]="5">5 items per page</option>
+        <option [ngValue]="10">10 items per page</option>
+        <option [ngValue]="20">20 items per page</option>
+      </select>
+    </div>
+
+  </div>
+</div>
