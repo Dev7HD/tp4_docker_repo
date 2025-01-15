@@ -2466,6 +2466,7 @@ textarea.form-control-lg {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
+
 .form-floating > .form-control:-webkit-autofill,
 .form-floating > .form-control-plaintext:-webkit-autofill {
   padding-top: 1.625rem;
@@ -3150,7 +3151,12 @@ textarea.form-control-lg {
   --bs-btn-font-size: 0.875rem;
   --bs-btn-border-radius: 0.25rem;
 }
-
+.zoom{
+  transition: .2s;
+}
+.zoom:hover{
+  transform: scale(1.05);
+}
 .fade {
   transition: opacity 0.15s linear;
 }
